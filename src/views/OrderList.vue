@@ -14,38 +14,19 @@
           </tr>
       </thead>
       <tbody>
-          <tr>
-              <td>1</td>
-              <td>2</td>
-              <td>3</td>
-              <td>4</td>
-              <td>5</td>
-              <td>6</td>
-              <td>7
-                  <div class="btn-group  d-flex align-items-center">
-                    <button class="btn btn-primary"
-                      @click.prevent="openModal"
-                      >詳細</button>
-                    <button class="btn btn-danger"
-                      @click.prevent="openModal(item,'delete')"
-                      >刪除</button>
-                  </div>
-              </td>
-          </tr>
-          <template v-for="order in orders" :key="order">
-            <tr v-for="item in order" :key="item.id">
-              <td>{{item.create_at}}</td>
+            <tr v-for="item in orders" :key="item.id">
+              <td>{{$filters.date(item.create_at)}}</td>
               <td>{{item.user.email}}</td>
               <td>
                   <ul v-for="product in item.products" :key="product">
                       <li>
-                          {{product.id}}
-                          {{product.product_id}}
+                          {{product.product.title}}
                           {{product.qty}}
+                          {{product.product.unit}}
                       </li>
                   </ul>
               </td>
-              <td>{{item.total}}</td>
+              <td>{{$filters.currency(item.total)}}</td>
               <td>{{item.is_paid}}</td>
               <td>{{item.message}}</td>
               <td>
@@ -59,7 +40,6 @@
                   </div>
               </td>
             </tr>
-          </template>
       </tbody>
     </table>
   </div>
@@ -92,7 +72,7 @@ export default {
   inject: ['emitter'],
   methods: {
     getOrders (page = 1) {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders/?page=${page}`
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`
       this.isLoading = true
       this.$http.get(api)
         .then((res) => {

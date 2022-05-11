@@ -52,7 +52,10 @@
   </div>
   <div class="col-12 col-md-5">
     cart
-    <template v-if="cart.carts">
+    <div v-if="!cartShow" class="text-center">
+      目前購物車內是空的
+    </div>
+    <template v-else>
     <table class="table align-middle">
       <thead>
         <tr>
@@ -72,7 +75,7 @@
             </td>
             <td>
               {{item.product.title}}
-              <div v-if="item.coupon.code" class="text-success">
+              <div v-if="item.coupon" class="text-success">
                 已套用優惠券 {{item.coupon.title}}
               </div>
             </td>
@@ -85,7 +88,7 @@
                 <div class="input-group-text">/ {{ item.product.unit }}</div>
               </div>
             </td>
-            <td><small v-if="item.coupon.code" class="text-success">折扣價：</small>{{ $filters.currency(item.final_total) }}</td>
+            <td><small v-if="item.coupon" class="text-success">折扣價：</small>{{ $filters.currency(item.final_total) }}</td>
           </tr>
       </tbody>
       <tfoot>
@@ -93,7 +96,7 @@
           <td colspan="3" class="text-end">總計</td>
           <td class="text-end">{{ $filters.currency(cart.total) }}</td>
         </tr>
-        <tr>
+        <tr v-if="cart.total > cart.final_total">
           <td colspan="3" class="text-end text-success">折扣價</td>
           <td class="text-end text-success">{{ $filters.currency(cart.final_total) }}</td>
         </tr>
@@ -111,6 +114,52 @@
       </div>
     </template>
   </div>
+  <div class="col-12">
+    <div class="container p-3">
+      <vee-form v-slot="{ errors, validate } " @submit="createOrder">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <vee-field type="email" class="form-control" id="email" placeholder="請輸入Email" name="email" required
+            rules="email|required"
+            :class="{ 'is-invalid': errors['email'] }"
+            v-model="form.user.email"></vee-field>
+          <error-message name="email" class="invalid-feedback"></error-message>
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">收件人姓名</label>
+          <vee-field type="text" class="form-control" id="name" placeholder="請輸入姓名" name="name" required
+            rules="required"
+            :class="{ 'is-invalid': errors['name'] }"
+            v-model="form.user.name"></vee-field>
+          <error-message name="name" class="invalid-feedback"></error-message>
+        </div>
+        <div class="mb-3">
+          <label for="tel" class="form-label">收件人電話</label>
+          <vee-field type="text" class="form-control" id="tel" placeholder="請輸入電話" name="tel" required
+            :rules="isPhone"
+            :class="{ 'is-invalid': errors['tel'] }"
+            v-model="form.user.tel"></vee-field>
+          <error-message name="tel" class="invalid-feedback"></error-message>
+        </div>
+        <div class="mb-3">
+          <label for="address" class="form-label">收件人地址</label>
+          <vee-field type="text" class="form-control" id="address" placeholder="請輸入收件地址" name="address" required
+            rules="required"
+            :class="{ 'is-invalid': errors['address'] }"
+            v-model="form.user.address"></vee-field>
+          <error-message name="address" class="invalid-feedback"></error-message>
+        </div>
+        <div class="mb-3">
+          <label for="message" class="form-label">留言</label>
+          <vee-field class="form-control" id="message" rows="3" name="message"
+            v-model="form.message"></vee-field>
+        </div>
+        <div class="mb-3 d-flex ">
+          <button type="submit" class="btn btn-primary ms-auto" @click="validate">送出訂單</button>
+        </div>
+      </vee-form>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -127,7 +176,17 @@ export default {
       isLoading: false,
       pagination: {},
       cart: {},
-      voucherCode: ''
+      cartShow: false,
+      voucherCode: '',
+      form: {
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address: ''
+        },
+        message: ''
+      }
     }
   },
   components: {
@@ -167,6 +226,10 @@ export default {
         console.log(res.data)
         this.cart = res.data.data
         this.isLoading = false
+        this.cartShow = false
+        if (res.data.data.carts.length > 0) {
+          this.cartShow = true
+        }
       })
     },
     updateCart (item) {
@@ -203,6 +266,31 @@ export default {
         this.isLoading = false
         this.getCart()
       })
+    },
+    createOrder () {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`
+      const order = this.form
+      this.isLoading = true
+      this.$http.post(api, { data: order }).then((res) => {
+        console.log(res.data.orderId)
+        this.$httpMessageState(res, '新增訂單')
+        this.isLoading = false
+        this.getCart()
+        this.form = {
+          user: {
+            name: '',
+            email: '',
+            tel: '',
+            address: ''
+          },
+          message: ''
+        }
+        this.$router.push(`/user/checkout/${res.data.orderId}`)
+      })
+    },
+    isPhone (value) {
+      const phoneNumber = /^(09)[0-9]{8}$/
+      return phoneNumber.test(value) ? true : '手機號碼格式錯誤'
     }
   },
   created () {
