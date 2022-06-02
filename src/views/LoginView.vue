@@ -3,7 +3,7 @@
     <div class="row h-100">
       <div class="col-md-6 col-12 ">
         <div class="d-flex align-items-center h-100 bg-info">
-          <h2 class="text-center">login</h2>
+          <h2 class="text-center">後台管理登入</h2>
         </div>
       </div>
       <div class="col-md-6 col-12 h-100 d-flex align-items-center ">

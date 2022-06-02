@@ -5,11 +5,17 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      title: '塔可餅車車'
+    }
   },
   {
     path: '/login',
-    component: () => import('../views/LoginView.vue')
+    component: () => import('../views/LoginView.vue'),
+    meta: {
+      title: '後臺登入'
+    }
   },
   {
     path: '/dashboard',
@@ -48,6 +54,14 @@ const routes = [
       {
         path: 'checkout/:orderId',
         component: () => import('../views/UserCheckout.vue')
+      },
+      {
+        path: 'story',
+        component: () => import('../views/AboutView.vue')
+      },
+      {
+        path: 'news',
+        component: () => import('../views/NewsView.vue')
       }
     ]
   }
@@ -57,6 +71,13 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
   linkActiveClass: 'active'
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title
+  }
+  next()
 })
 
 export default router

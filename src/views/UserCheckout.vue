@@ -52,7 +52,7 @@
     </table>
     <div class="text-end">
       <button v-if="!order.is_paid" class="btn btn-danger">確認付款去</button>
-      <button v-else class="btn btn-primary">繼續購物</button>
+      <router-link v-else class="btn btn-primary" to="/user/cart">繼續購物</router-link>
     </div>
   </form>
   </div>

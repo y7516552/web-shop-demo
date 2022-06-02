@@ -56,6 +56,8 @@
       目前購物車內是空的
     </div>
     <template v-else>
+      <button type="button" class="btn btn-danger"
+        @click.prevent="deleteAllCart">清空購物車</button>
     <table class="table align-middle">
       <thead>
         <tr>
@@ -114,7 +116,7 @@
       </div>
     </template>
   </div>
-  <div class="col-12">
+  <div v-if="cartShow" class="col-12">
     <div class="container p-3">
       <vee-form v-slot="{ errors, validate } " @submit="createOrder">
         <div class="mb-3">
@@ -164,6 +166,7 @@
 </template>
 
 <script>
+import emitter from '@/methods/emitter'
 import PaginationBar from '../components/PaginationBar.vue'
 export default {
   data () {
@@ -192,6 +195,11 @@ export default {
   components: {
     PaginationBar
   },
+  provide () {
+    return {
+      emitter
+    }
+  },
   methods: {
     getProducts (page = 1) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/?page=${page}`
@@ -215,6 +223,7 @@ export default {
       }
       this.$http.post(api, { data: cart }).then((res) => {
         console.log(res)
+        emitter.emit('updateCart')
         this.status.loadingItem = ''
         this.getCart()
       })
@@ -251,6 +260,17 @@ export default {
       this.isLoading = true
       this.$http.delete(api).then((res) => {
         this.isLoading = false
+        emitter.emit('updateCart')
+        this.getCart()
+      })
+    },
+    deleteAllCart () {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/carts`
+      this.isLoading = true
+      this.$http.delete(api).then((res) => {
+        this.$httpMessageState(res, '清空購物車')
+        this.isLoading = false
+        emitter.emit('updateCart')
         this.getCart()
       })
     },

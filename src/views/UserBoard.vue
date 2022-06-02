@@ -1,5 +1,5 @@
 <template>
-  userboard
+  <navbar-component></navbar-component>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/user/cart">購物車</router-link>
@@ -13,11 +13,13 @@
 
 <script>
 import emitter from '@/methods/emitter.js'
+import NavbarComponent from '../components/NavbarComponent.vue'
 import ToastMessage from '../components/ToastMessages.vue'
 
 export default {
   components: {
-    ToastMessage
+    ToastMessage,
+    NavbarComponent
   },
   provide () {
     return {

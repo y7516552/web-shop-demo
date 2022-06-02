@@ -18,7 +18,8 @@
     </div>
     <div class="modal-body">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
+          <h5>封面圖</h5>
           <div class="mb-3">
             <label for="image" class="form-label">輸入圖片網址</label>
             <input type="text" class="form-control" id="image"
@@ -30,27 +31,60 @@
               <i class="fas fa-spinner fa-spin"></i>
             </label>
             <input type="file" id="customFile" class="form-control"
-              @change="uploadFile" ref="fileInput">
+              ref="fileInput"
+              @change="uploadFile(true)">
           </div>
           <img class="img-fluid" alt="" :src="tempProduct.imageUrl">
           <!-- 延伸技巧，多圖 -->
           <div class="mt-5">
-            <div class="mb-3 input-group" >
-              <input type="url" class="form-control form-control"
-                      placeholder="請輸入連結"
-                      v-model="tempProduct.imagesUrl">
-              <button type="button" class="btn btn-outline-danger">
-                移除
-              </button>
-            </div>
+            <h5>其他圖</h5>
             <div>
-              <button class="btn btn-outline-primary btn-sm d-block w-100">
+              <button v-if="!openImgInput" type="button" class="btn btn-outline-primary btn-sm d-block w-100"
+                @click="InputControl">
                 新增圖片
               </button>
             </div>
+            <div class="row">
+              <div class="col-6"  v-if="openImgInput">
+                <div class="mb-3" >
+                  <input type="url" class="form-control form-control"
+                    placeholder="請輸入連結"
+                    v-model="tempImages">
+                  <input type="file" id="customFile" class="form-control"
+                    ref="fileInput"
+                    @change="uploadFile(false)">
+                  <img class="img-fluid" alt="" :src="tempImages">
+                  <div class="mt-1">
+                    <button type="button" class="btn btn-outline-danger"
+                      @click="InputControl">
+                        取消
+                    </button>
+                    <button type="button" class="btn btn-outline-success"
+                      @click="addImages">
+                        新增
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" v-if="tempProduct.imagesUrl">
+              <div class="col-6" v-for="(img, index) in tempProduct.imagesUrl" :key="img">
+                <div class="mb-3" >
+                  <label for="images" class="form-label">圖片 {{ index+1 }}</label>
+                  <input type="url" class="form-control form-control" id="images"
+                          placeholder="請輸入連結"
+                          v-model="tempProduct.imagesUrl[index]">
+                  <img class="img-fluid" alt="" :src="tempProduct.imagesUrl[index]">
+                  <button type="button" class="btn btn-outline-danger mt-1"
+                    @click="deleteImg(index)">
+                    移除
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
           <div class="mb-3">
             <label for="title" class="form-label">標題</label>
             <input type="text" class="form-control" id="title"
@@ -151,28 +185,57 @@ export default {
   data () {
     return {
       modal: {},
-      tempProduct: {}
+      tempProduct: {},
+      tempImages: '',
+      openImgInput: false
     }
   },
   methods: {
     showModal () {
       this.modal.show()
+      this.tempImages = ''
+      this.openImgInput = false
     },
     hideModal () {
       this.tempProduct = {}
+      this.tempImages = ''
       this.modal.hide()
     },
-    uploadFile () {
+    uploadFile (type, index) {
       const uploadedFile = this.$refs.fileInput.files[0]
+      console.dir(uploadedFile)
       const formData = new FormData()
       formData.append('file-to-upload', uploadedFile)
+      console.dir(formData)
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
       this.$http.post(url, formData)
         .then((res) => {
+          console.log(res.data)
+          this.$httpMessageState(res, '新增檔案')
           if (res.data.success) {
-            this.tempProduct.imageUrl = res.data.imageUrl
+            if (type) {
+              this.tempProduct.imageUrl = res.data.imageUrl
+            } else {
+              this.tempImages = res.data.imageUrl
+            }
           }
         })
+    },
+    InputControl () {
+      if (!this.openImgInput) {
+        this.openImgInput = true
+      } else {
+        this.openImgInput = false
+      }
+    },
+    deleteImg (index) {
+      this.tempProduct.imagesUrl.splice(index, 1)
+    },
+    addImages () {
+      this.tempProduct.imagesUrl = []
+      this.tempProduct.imagesUrl.push(this.tempImages)
+      this.tempImages = ''
+      this.openImgInput = false
     }
   },
   mixins: [modalMixin]

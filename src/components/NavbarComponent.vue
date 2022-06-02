@@ -1,11 +1,14 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <div class="container-fluid">
-      <router-link class="navbar-brand" to="/">後台</router-link>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid px-5">
+      <router-link class="navbar-brand" to="/">
+        <img class="logo" src="../img/taco.svg" alt="由 Twitter, CC BY 4.0, https://commons.wikimedia.org/w/index.php?curid=59969682">
+        塔可餅車車
+      </router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <div v-if="isLogin" class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav w-100">
           <li class="nav-item">
             <router-link class="nav-link" to="/">Home</router-link>
@@ -27,22 +30,48 @@
               使用者
             </button >
             <ul class="dropdown-menu" :class="{'show':  dropdownNav}">
-              <li>
-                <router-link class="dropdown-item" to="/login">Login</router-link>
-              </li>
-              <li>
+              <li v-if="isLogin">
                 <a class="dropdown-item" @click.prevent="logout">Logout</a>
               </li>
             </ul>
           </li>
         </ul>
       </div>
+      <div v-else class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav w-100">
+          <li class="nav-item px-3">
+            <router-link class="nav-link" to="/user/cart">美味精選</router-link>
+          </li>
+          <li class="nav-item px-3">
+            <router-link class="nav-link" to="/user/story">車車故事</router-link>
+          </li>
+          <li class="nav-item px-3">
+            <router-link class="nav-link" to="/dashboard/vouchers">優惠資訊</router-link>
+          </li>
+        </ul>
+      </div>
+      <dropdown-cart></dropdown-cart>
     </div>
   </nav>
 </template>
-<script>
 
+<style lang="scss">
+.navbar-brand{
+  font-weight: 900;
+  .logo{
+    width: 40px;
+    height: 40px;
+  }
+}
+</style>
+
+<script>
+import DropdownCart from '../components/DropdownCart.vue'
 export default {
+  props: ['isLogin'],
+  components: {
+    DropdownCart
+  },
   data () {
     return {
       dropdownNav: false
