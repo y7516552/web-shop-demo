@@ -25,6 +25,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/dashboard/articles">ArticleList</router-link>
           </li>
+          <li class="nav-item px-3">
+            <router-link class="nav-link" to="/dashboard/cart">cart</router-link>
+          </li>
           <li class="nav-item dropdown ms-auto me-5">
             <button class="btn btn-secondary dropdown-toggle" type="button" @click.prevent="dropdown">
               使用者
@@ -40,13 +43,13 @@
       <div v-else class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav w-100">
           <li class="nav-item px-3">
-            <router-link class="nav-link" to="/user/cart">美味精選</router-link>
+            <router-link class="nav-link" to="/user/product">美味精選</router-link>
           </li>
           <li class="nav-item px-3">
             <router-link class="nav-link" to="/user/story">車車故事</router-link>
           </li>
           <li class="nav-item px-3">
-            <router-link class="nav-link" to="/dashboard/vouchers">優惠資訊</router-link>
+            <router-link class="nav-link" to="/user/news">優惠資訊</router-link>
           </li>
         </ul>
       </div>

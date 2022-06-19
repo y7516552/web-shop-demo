@@ -1,6 +1,6 @@
 <template>
   <loading-component :active="isLoading"></loading-component>
-  <div class="container pb-2">
+  <div class="container pt-3">
     <table class="table mt-5 ">
       <thead>
           <tr>
@@ -26,7 +26,7 @@
                       </li>
                   </ul>
               </td>
-              <td>{{$filters.currency(item.total)}}</td>
+              <td>{{$filters.currency(item.total)}}元</td>
               <td>{{item.is_paid}}</td>
               <td>{{item.message}}</td>
               <td>
@@ -48,7 +48,8 @@
   <order-modal ref="orderModal"
     :order="tempOrder"></order-modal>
   <del-modal ref="delModal"
-    :item="tempOrder"></del-modal>
+    :item="tempOrder"
+    @delete-order="deleteOrder"></del-modal>
 </template>
 
 <script>
@@ -92,7 +93,7 @@ export default {
       }
       orderComponent.showModal()
     },
-    deleteProduct (item) {
+    deleteOrder (item) {
       this.tempOrder = item
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`
       const orderComponent = this.$refs.delModal

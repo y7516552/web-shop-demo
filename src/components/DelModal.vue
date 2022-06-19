@@ -11,16 +11,18 @@
   <div class="modal-content border-0">
     <div class="modal-header bg-danger text-white">
       <h5 class="modal-title" id="exampleModalLabel">
-        <span v-if="item.code">刪除優惠券 {{ item.title }} </span>
-        <span v-else-if="item.title">刪除產品 {{ item.title }} </span>
+        <span v-if="item.author">刪除文章 {{ item.title }} </span>
+        <span v-else-if="item.code">刪除優惠券 {{ item.title }} </span>
+        <span v-else-if="item.category">刪除產品 {{ item.title }} </span>
         <span v-else>刪除訂單 {{ item.id }} </span>
       </h5>
       <button type="button" class="btn-close"
               data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-      <span v-if="item.code">是否要刪除<strong class="text-danger">{{ item.title }}</strong>?</span>
-      <span v-else-if="item.title">是否要刪除<strong class="text-danger">{{ item.title }}</strong>?</span>
+      <span v-if="item.author">是否要刪除文章<strong class="text-danger">{{ item.title }}</strong>?</span>
+      <span v-else-if="item.code">是否要刪除優惠券<strong class="text-danger">{{ item.title }}</strong>?</span>
+      <span v-else-if="item.category">是否要刪除產品<strong class="text-danger">{{ item.title }}</strong>?</span>
       <span v-else>是否要刪除訂單<strong class="text-danger">{{ item.title }}</strong>?</span>
     </div>
     <div class="modal-footer">
@@ -29,10 +31,13 @@
               @click.prevent="hideModal">取消
       </button>
       <button type="button" class="btn btn-primary"
-        v-if="item.code"
+        v-if="item.author"
+        @click.prevent="$emit('delete-article', tempArticle)">確認</button>
+      <button type="button" class="btn btn-primary"
+        v-else-if="item.code"
         @click.prevent="$emit('delete-voucher', tempVoucher)">確認</button>
       <button type="button" class="btn btn-primary"
-        v-else-if="item.title"
+        v-else-if="item.category"
         @click.prevent="$emit('delete-product', tempProduct)">確認</button>
       <button type="button" class="btn btn-primary"
         v-else
@@ -55,9 +60,11 @@ export default {
   },
   watch: {
     item () {
-      if (this.item.code) {
+      if (this.item.author) {
+        this.tempArticle = this.item
+      } else if (this.item.code) {
         this.tempVoucher = this.item
-      } else if (this.item.title) {
+      } else if (this.item.category) {
         this.tempProduct = this.item
       } else {
         this.tempOrder = this.item
@@ -69,7 +76,8 @@ export default {
       modal: {},
       tempProduct: {},
       tempOrder: {},
-      tempVoucher: {}
+      tempVoucher: {},
+      tempArticle: {}
     }
   },
   mixins: [modalMixin]

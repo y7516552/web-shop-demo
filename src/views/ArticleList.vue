@@ -16,9 +16,9 @@
       </thead>
       <tbody>
           <tr v-for="item in articles" :key="item.id">
-              <td>{{item.create_at}}</td>
+              <td>{{$filters.date(item.create_at)}}</td>
               <td>{{item.title}}</td>
-              <td>{{item.author}} %</td>
+              <td>{{item.author}}</td>
               <td>
                   <span class="text-success" v-if="item.isPublic"><strong>啟用</strong></span>
                   <span class="text-muted" v-else><strong>未啟用</strong></span>
@@ -26,9 +26,9 @@
               <td>
                   <div class="btn-group  d-flex align-items-center">
                     <button class="btn btn-primary"
-                      @click.prevent="">編輯</button>
+                      @click.prevent="openModal(false, item)">編輯</button>
                     <button class="btn btn-danger"
-                      @click.prevent="">刪除</button>
+                      @click.prevent="openModal(false, item,'delete')">刪除</button>
                   </div>
               </td>
           </tr>
@@ -40,7 +40,9 @@
   <article-modal ref="articleModal"
     :article="tempArticle"
     @update-article="updateArticle"></article-modal>
-  <del-modal ref="delModal"></del-modal>
+  <del-modal ref="delModal"
+    :item="tempArticle"
+    @delete-article="deleteArticle"></del-modal>
 </template>
 
 <script>
@@ -82,7 +84,15 @@ export default {
       if (isNew) {
         this.tempArticle = {}
       } else {
-        this.tempArticle = { ...item }
+        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/article/${item.id}`
+        this.$http.get(api)
+          .then((res) => {
+            console.log(res.data.article)
+            this.isLoading = false
+            if (res.data.success) {
+              this.tempArticle = res.data.article
+            }
+          })
       }
       let ArticleComponent = this.$refs.articleModal
       if (modal === 'delete') {
@@ -101,12 +111,23 @@ export default {
         api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/article/${item.id}`
         httpMethod = 'put'
       }
-      const articleComponent = this.$refs.articleModal
+      const ArticleComponent = this.$refs.articleModal
       this.$http[httpMethod](api, { data: this.tempArticle })
         .then((res) => {
           this.getArticles()
           this.$httpMessageState(res, '更新文章')
-          articleComponent.hideModal()
+          ArticleComponent.hideModal()
+        })
+    },
+    deleteArticle (item) {
+      this.tempArticle = item
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/article/${item.id}`
+      const ArticleComponent = this.$refs.delModal
+      this.$http.delete(api)
+        .then((res) => {
+          this.$httpMessageState(res, '刪除文章')
+          ArticleComponent.hideModal()
+          this.getArticles()
         })
     }
   },

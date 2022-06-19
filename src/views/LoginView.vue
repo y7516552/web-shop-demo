@@ -2,8 +2,9 @@
   <div class="container " style="height:98vh">
     <div class="row h-100">
       <div class="col-md-6 col-12 ">
-        <div class="d-flex align-items-center h-100 bg-info">
-          <h2 class="text-center">後台管理登入</h2>
+        <div class="login-bg">
+          <h2 class="text-center">後台管理</h2>
+          <h3 class="text-center">塔可餅車車</h3>
         </div>
       </div>
       <div class="col-md-6 col-12 h-100 d-flex align-items-center ">
@@ -35,6 +36,23 @@
     </div>
   </div>
 </template>
+
+<style lang="scss">
+.login-bg{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  background-image: url("../img/banner/banner-7.jpg") ;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  h2,
+  h3{
+    transform: translateY(250%);
+  }
+}
+</style>
 
 <script>
 export default {

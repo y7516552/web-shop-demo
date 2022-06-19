@@ -1,25 +1,21 @@
 <template>
   <div v-if="isLoading" class="loading">Loading...</div>
   <navbar-component></navbar-component>
-  <banner-component></banner-component>
+  <banner-component
+    :msg="msgHome"></banner-component>
   <section class="my-5" id="product-card">
     <div class="container">
       <product-card></product-card>
     </div>
   </section>
-  <section class="my-5 " id="ingerdients">
-    <ingerdients-section></ingerdients-section>
-  </section>
-  <section class="my-5" id="article">
+  <section class="my-5 py-5" id="news">
     <div class="container">
-      <h3>最新消息</h3>
-      <div class="row"></div>
+      <news-section></news-section>
     </div>
   </section>
   <section class="my-5 py-5" id="location">
     <div class="container">
-      <h3>發車資訊</h3>
-      <div class="row"></div>
+      <location-section></location-section>
     </div>
   </section>
   <footer-component></footer-component>
@@ -28,6 +24,7 @@
 <style lang="scss">
 html{
   overflow-x: hidden;
+  scroll-behavior: smooth;
   .loading{
     position: fixed;
     z-index: 5;
@@ -38,29 +35,15 @@ html{
     justify-content: center;
     align-items: center;
   }
-  #ingerdients{
-    position: relative;
-    color: #fff;
-    background-image: linear-gradient(150deg, rgba(255, 255, 255, 0.733) 50%, transparent 50%);
-    &::before{
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      background-image: url(../img/about/alora-1.jpg);
-      background-size: cover;
-    }
+  #news{
+    min-height: 70vh;
+    background-color: #999;
+    background-image: url("../img/news/i-bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
   #location{
-    height: 135vh;
-    background-image: url(../img/about/car.jpg);
-    background-repeat: no-repeat;
-    background-position: 50 0;
-    background-size: 100%;
-    opacity: .6;
     color: #fff;
   }
 }
@@ -71,13 +54,21 @@ import NavbarComponent from '../components/NavbarComponent.vue'
 import BannerComponent from '../components/BannerComponent.vue'
 import FooterComponent from '../components/FooterComponent.vue'
 import ProductCard from '../components/ProductCard.vue'
-import IngerdientsSection from '../components/IngerdientsSection.vue'
+import LocationSection from '../components/LocationSection'
+import NewsSection from '../components/NewsSection.vue'
 // @ is an alias to /src
 export default {
   data () {
     return {
       isLogin: false,
-      isLoading: true
+      isLoading: true,
+      msgHome: {
+        title1: 'Choo Choo Tacos 塔可餅車車',
+        title2: '美墨快餐車',
+        content: '美味、方便、快速',
+        link: '趕快上車',
+        router: 'product'
+      }
     }
   },
   components: {
@@ -85,7 +76,8 @@ export default {
     BannerComponent,
     FooterComponent,
     ProductCard,
-    IngerdientsSection
+    LocationSection,
+    NewsSection
   },
   mounted () {
     this.isLoading = false

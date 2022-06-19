@@ -185,7 +185,9 @@ export default {
   data () {
     return {
       modal: {},
-      tempProduct: {},
+      tempProduct: {
+        imagesUrl: []
+      },
       tempImages: '',
       openImgInput: false
     }
@@ -194,6 +196,7 @@ export default {
     showModal () {
       this.modal.show()
       this.tempImages = ''
+      this.$refs.fileInput.value = ''
       this.openImgInput = false
     },
     hideModal () {
@@ -232,7 +235,10 @@ export default {
       this.tempProduct.imagesUrl.splice(index, 1)
     },
     addImages () {
-      this.tempProduct.imagesUrl = []
+      console.log(this.tempProduct.imagesUrl)
+      if (!this.tempProduct.imagesUrl) {
+        this.tempProduct.imagesUrl = []
+      }
       this.tempProduct.imagesUrl.push(this.tempImages)
       this.tempImages = ''
       this.openImgInput = false

@@ -1,5 +1,4 @@
 <template>
-  articlemodal
   <div
   class="modal fade"
   id="exampleModal"
@@ -34,22 +33,6 @@
               @change="uploadFile" ref="fileInput">
           </div>
           <img class="img-fluid" alt="" :src="tempArticle.image">
-          <!-- 延伸技巧，多圖 -->
-          <div class="mt-5">
-            <div class="mb-3 input-group" >
-              <input type="url" class="form-control form-control"
-                      placeholder="請輸入連結"
-                      v-model="tempArticle.imagesUrl">
-              <button type="button" class="btn btn-outline-danger">
-                移除
-              </button>
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-sm d-block w-100">
-                新增圖片
-              </button>
-            </div>
-          </div>
         </div>
         <div class="col-sm-8">
           <div class="mb-3">
@@ -129,8 +112,7 @@ export default {
   watch: {
     article () {
       this.tempArticle = this.article
-      this.tempArticle.create_at = new Date()
-      console.log(this.tempArticle.create_at)
+      this.tempArticle.create_at = Math.floor(new Date().getTime() / 1000)
       if (!this.article.isPublic) {
         this.tempArticle.isPublic = false
       }

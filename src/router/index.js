@@ -20,22 +20,37 @@ const routes = [
   {
     path: '/dashboard',
     component: () => import('../views/DashBoard.vue'),
+    meta: {
+      title: '後臺'
+    },
     children: [
       {
         path: 'products',
-        component: () => import('../views/ProductList.vue')
+        component: () => import('../views/ProductList.vue'),
+        meta: {
+          title: '後臺 - 產品列表'
+        }
       },
       {
         path: 'orders',
-        component: () => import('../views/OrderList.vue')
+        component: () => import('../views/OrderList.vue'),
+        meta: {
+          title: '後臺 - 訂單列表'
+        }
       },
       {
         path: 'vouchers',
-        component: () => import('../views/VoucherList.vue')
+        component: () => import('../views/VoucherList.vue'),
+        meta: {
+          title: '後臺 - 優惠券列表'
+        }
       },
       {
         path: 'articles',
-        component: () => import('../views/ArticleList.vue')
+        component: () => import('../views/ArticleList.vue'),
+        meta: {
+          title: '後臺 - 最新消息列表'
+        }
       }
     ]
   },
@@ -45,23 +60,54 @@ const routes = [
     children: [
       {
         path: 'cart',
-        component: () => import('../views/UserCart.vue')
+        component: () => import('../views/UserCart.vue'),
+        meta: {
+          title: '購物車'
+        }
+      },
+      {
+        path: 'product',
+        component: () => import('../views/UserProductList.vue'),
+        meta: {
+          title: '塔可餅車車 - 美味精選'
+        }
       },
       {
         path: 'product/:productId',
-        component: () => import('../views/UserProduct.vue')
+        component: () => import('../views/UserProduct.vue'),
+        meta: {
+          title: '塔可餅車車 - 美味精選'
+        }
       },
       {
         path: 'checkout/:orderId',
-        component: () => import('../views/UserCheckout.vue')
+        component: () => import('../views/UserCheckout.vue'),
+        meta: {
+          title: '塔可餅車車 - 結帳頁'
+        }
       },
       {
         path: 'story',
-        component: () => import('../views/AboutView.vue')
+        component: () => import('../views/AboutView.vue'),
+        meta: {
+          title: '塔可餅車車 - 車車故事'
+        }
       },
       {
         path: 'news',
-        component: () => import('../views/NewsView.vue')
+        component: () => import('../views/NewsView.vue'),
+        meta: {
+          title: '塔可餅車車 - 最新消息'
+        },
+        children: [
+          {
+            path: '/:newsId',
+            component: () => import('../views/NewsView.vue'),
+            meta: {
+              title: '塔可餅車車 - 最新消息'
+            }
+          }
+        ]
       }
     ]
   }

@@ -21,31 +21,43 @@
         <div class="col-sm-4">
           用戶資料
           <div class="mb-3">
-            姓名
+            <label for="name" class="form-label">姓名</label>
+            <input type="text" class="form-control" id="name"
+                    required
+                    v-model="tempOrder.user.name">
           </div>
           <div class="mb-3">
-              Email
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email"
+                    required
+                    v-model="tempOrder.user.email">
           </div>
           <div class="mb-3">
-              電話
+            <label for="phone" class="form-label">電話</label>
+            <input type="text" class="form-control" id="phone"
+                    required
+                    v-model="tempOrder.user.tel">
           </div>
           <div class="mt-5">
-            地址
+            <label for="address" class="form-label">地址</label>
+            <input type="text" class="form-control" id="address"
+                    required
+                    v-model="tempOrder.user.address">
           </div>
         </div>
         <div class="col-sm-8">
           訂單細節
-          <div class="mb-3">
-          </div>
-          <div class="row gx-2">
-          </div>
+          <div class="row gx-2" v-for="item in tempOrder.products" :key="item">
+            <div class="mb-3 d-flex justify-content-between">
+              {{item.product.title }}
+              <div class="border">{{ item.qty }} / {{ item.product.unit }}</div>
+              {{ $filters.currency(item.product.price) }} 元
+            </div>
           <hr>
-          選購商品
-          <div class="mb-3">
           </div>
+          總金額
           <div class="mb-3">
-          </div>
-          <div class="mb-3">
+            {{$filters.currency(tempOrder.total)}} 元
           </div>
         </div>
       </div>
@@ -73,14 +85,20 @@ export default {
     }
   },
   watch: {
-    product () {
+    order () {
       this.tempOrder = this.order
     }
   },
   data () {
     return {
       modal: {},
-      tempOrder: {}
+      tempOrder: {
+        user: {
+          name: ''
+        },
+        products: {}
+      },
+      products: []
     }
   },
   methods: {

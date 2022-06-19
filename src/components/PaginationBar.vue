@@ -18,6 +18,27 @@
   </nav>
 </template>
 
+<style lang="scss">
+nav{
+  .pagination{
+    .page-item{
+      &.active{
+        .page-link{
+          border-color: #000;
+          background-color: #fff;
+          color: #000;
+        }
+      }
+      .page-link{
+        background-color: #000;
+        color: #fff;
+        font-weight: 700;
+      }
+    }
+  }
+}
+</style>
+
 <script>
 export default {
   props: ['pages'],
