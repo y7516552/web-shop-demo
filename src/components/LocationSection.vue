@@ -1,6 +1,6 @@
 <template>
-   <h3 class="title">發車資訊</h3>
-   <div class="row my-4">
+   <h3 class="section-title location">發車資訊</h3>
+   <div class="row py-5">
     <div class="col-12 col-md-6">
       <div id="address">
         <div class="card">
@@ -15,15 +15,12 @@
       </div>
     </div>
     <div class="col-12 col-md-6">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d5000.802794333556!2d120.65662839665806!3d24.18164790307173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1szh-TW!2stw!4v1654572679375!5m2!1szh-TW!2stw" width="600" height="540" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d5000.802794333556!2d120.65662839665806!3d24.18164790307173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1szh-TW!2stw!4v1654572679375!5m2!1szh-TW!2stw" width="600" height="620" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
    </div>
 </template>
 
 <style lang="scss">
-  .title{
-    color: #000;
-  }
   #address{
     background-color: #fff;
     .card{

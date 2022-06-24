@@ -12,6 +12,7 @@
     <div class="modal-header bg-dark text-white">
       <h5 class="modal-title" id="exampleModalLabel">
         <span>訂單詳細</span>
+        {{tempOrder.id}}
       </h5>
       <button type="button" class="btn-close"
               data-bs-dismiss="modal" aria-label="Close"></button>

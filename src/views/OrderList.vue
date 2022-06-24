@@ -27,7 +27,10 @@
                   </ul>
               </td>
               <td>{{$filters.currency(item.total)}}元</td>
-              <td>{{item.is_paid}}</td>
+              <td>
+                <p v-if="item.is_paid" class="fs-5 text-success">已付款</p>
+                <p v-else class="fs-5 text-danger">未付款</p>
+              </td>
               <td>{{item.message}}</td>
               <td>
                   <div class="btn-group  d-flex align-items-center">

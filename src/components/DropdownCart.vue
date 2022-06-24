@@ -1,34 +1,40 @@
 <template>
-  <!-- Default dropstart button -->
-<div class="btn-group dropdown cart-menu">
-  <button type="button" class="btn  btn-secondary rounded"
+<div class="btn-group dropdown cart-menu ms-auto me-2">
+  <button type="button" class="btn  btn-dark rounded"
     @click.prevent="dropdown">
-      <i  class="bi bi-basket3"></i>
+      <i class="bi bi-cart-fill"></i>
       <span v-if="cartLength > 0" class=" badge rounded-pill bg-danger">
         {{ cartLength }}
       </span>
   </button>
-  <ul class="dropdown-menu mt-5 me-5 cart-list" :class="{'show':  dropdownBtn }">
+  <ul class="dropdown-menu mt-5 me-5 cart-list py-0"  :class="{'show':  dropdownBtn }">
     <template v-if="!cartShow">
       <li class="dropdown-item d-flex justify-content-center">
         目前購物車是空的喔!
       </li>
     </template>
     <template v-else>
-      <li class="dropdown-item d-flex justify-content-center border-bottom">購物車</li>
+      <li class="dropdown-item d-flex justify-content-center border-bottom bg-warning text-white">
+        <i class="bi bi-cart-fill me-2"></i>
+        購物車
+        </li>
       <li v-for="item in cart.carts" :key="item.id">
-        <div class="dropdown-item d-flex justify-content-between">
+        <div class="dropdown-item d-flex justify-content-between align-items-center">
           <button class="btn btn-outline-danger" type="button" @click.prevent="deleteCart(item.id)">X</button>
-          <router-link to="">{{ item.product.title }}</router-link>
+          <p class="fs-7 m-0">{{ item.product.title }}</p>
           <div class="input-group w-50">
             <input class="form-control" min="1" type="number" v-model="item.qty" @change="updateCart(item)">
             <div class="input-group-text">/ {{ item.product.unit }}</div>
           </div>
         </div>
       </li>
-      <li class="dropdown-item d-flex justify-content-center">
-        <router-link class="btn btn-info" to="">前往結帳</router-link>
+      <hr>
+      <li class="dropdown-item d-flex justify-content-between">
+        <p>小計</p>
+        <p>{{$filters.currency(cart.total)}}</p>
+        <p>元</p>
       </li>
+      <router-link class="btn btn-dark w-100 mt-2" to="/user/cart" @click.prevent="dropdown">前往結帳</router-link>
     </template>
   </ul>
 </div>
@@ -83,9 +89,9 @@ export default {
         this.$emit('emit-cartlength', this.cartLength)
         this.isLoading = false
         this.cartShow = false
-        // if (res.data.data.carts.length > 0) {
-        //   this.cartShow = true
-        // }
+        if (res.data.data.carts.length > 0) {
+          this.cartShow = true
+        }
       })
     },
     updateCart (item) {
@@ -95,11 +101,9 @@ export default {
         qty: item.qty
       }
       this.isLoading = true
-      this.status.loadingItem = item.id
       this.$http.put(api, { data: cart }).then((res) => {
         this.isLoading = false
         this.getCart()
-        this.status.loadingItem = ''
       })
     },
     deleteCart (id) {

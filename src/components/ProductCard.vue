@@ -1,5 +1,5 @@
 <template>
-  <h3>美味推薦</h3>
+  <h3 class="section-title">美味推薦</h3>
   <div class="row py-5">
     <div v-for="item in tempProducts" :key="item.id" class="col-6 col-md-4 col-lg-3">
       <div class="card rounded-3 text-white mt-3">
@@ -15,7 +15,7 @@
             </button>
             <button type="button" class="btn btn-success"
               :disabled="this.status.loadingItem === item.id"
-                  @click.prevent="addCart(item.id)">
+                  @click.prevent="addCart(item)">
               <div class="spinner-border text-danger spinner-grow-sm" role="status"
                 v-if="this.status.loadingItem === item.id">
                 <span class="visually-hidden">Loading...</span>
@@ -30,26 +30,31 @@
       <router-link class="btn-more" to="/user/product">更多選擇?</router-link>
     </div>
   </div>
+  <message-modal ref="messageModal"
+  :msg="msg"></message-modal>
 </template>
 <style lang="scss">
 .row{
-  .product-img{
-    height: 200px;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
-  .card-img-overlay{
-    opacity: 0;
-    background-color: rgba(102, 102, 102, 0.699);
-    transition: .5s;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    &:hover{
-      opacity: 1;
+  .card{
+    box-shadow: 3px 3px 8px 0px #999;
+    .product-img{
+      height: 200px;
+      background-size: cover;
+      background-repeat: no-repeat;
     }
-    .card-title{
-      font-weight: 900;
+    .card-img-overlay{
+      opacity: 0;
+      background-color: rgba(102, 102, 102, 0.699);
+      transition: .5s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      &:hover{
+        opacity: 1;
+      }
+      .card-title{
+        font-weight: 900;
+      }
     }
   }
   .btn-more{
@@ -61,7 +66,7 @@
   font-size: 16px;
   font-weight: 700;
   &:hover{
-    background-color: #000;
+    background-color: #fa0;
     color: #fff;
   }
 }
@@ -69,6 +74,7 @@
 </style>
 <script>
 import emitter from '@/methods/emitter'
+import MessageModal from '../components/MessageModal.vue'
 export default {
   data () {
     return {
@@ -77,8 +83,17 @@ export default {
       likeProduct: false,
       status: {
         loadingItem: ''
+      },
+      msg: {
+        title: '加入購物車',
+        product: {},
+        success: '',
+        qty: 1
       }
     }
+  },
+  components: {
+    MessageModal
   },
   methods: {
     getProducts () {
@@ -96,17 +111,25 @@ export default {
     getProduct (id) {
       this.$router.push(`/user/product/${id}`)
     },
-    addCart (id) {
+    addCart (item) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
-      this.status.loadingItem = id
+      const messageComponent = this.$refs.messageModal
+      this.status.loadingItem = item.id
       const cart = {
-        product_id: id,
+        product_id: item.id,
         qty: 1
       }
+      this.msg.product = item
       this.$http.post(api, { data: cart }).then((res) => {
         console.log(res)
-        emitter.emit('updateCart')
-        this.status.loadingItem = ''
+        this.msg.success = res.data.success
+        this.msg.title = res.data.message
+        this.msg.qty = 1
+        if (res.data.success) {
+          emitter.emit('updateCart')
+          this.status.loadingItem = ''
+          messageComponent.showModal()
+        }
       })
     }
   },

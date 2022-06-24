@@ -44,7 +44,7 @@
   justify-content: center;
   align-items: flex-start;
   height: 100%;
-  background-image: url("../img/banner/banner-7.jpg") ;
+  background-image: url("../img/banner/b-2.jpg") ;
   background-size: 100%;
   background-repeat: no-repeat;
   h2,

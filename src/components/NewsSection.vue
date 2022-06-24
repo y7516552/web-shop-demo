@@ -1,5 +1,5 @@
 <template>
-  <h3>最新消息</h3>
+  <h3 class="section-title news">最新消息</h3>
   <div class="row position-relative py-5">
     <table class="table table-light table-striped">
       <tbody>
@@ -18,6 +18,9 @@
 </template>
 
 <style lang="scss">
+.section-title.news{
+  color:#666;
+}
 .news-link{
   color: #000;
   font-weight: 700;

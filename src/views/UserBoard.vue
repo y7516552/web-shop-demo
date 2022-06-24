@@ -1,8 +1,8 @@
 <template>
   <navbar-component></navbar-component>
   <div class="container-fluid mt-5 pt-2 position-relative">
-    <toast-message class="mt-5"></toast-message>
-    <div class="container router-view">
+    <div class="container router-view mt-5">
+      <toast-message></toast-message>
       <router-view></router-view>
     </div>
   </div>

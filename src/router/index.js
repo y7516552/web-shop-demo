@@ -62,7 +62,7 @@ const routes = [
         path: 'cart',
         component: () => import('../views/UserCart.vue'),
         meta: {
-          title: '購物車'
+          title: '塔可餅車車 - 購物車'
         }
       },
       {
@@ -77,6 +77,13 @@ const routes = [
         component: () => import('../views/UserProduct.vue'),
         meta: {
           title: '塔可餅車車 - 美味精選'
+        }
+      },
+      {
+        path: 'orders',
+        component: () => import('../views/UserOrders.vue'),
+        meta: {
+          title: '塔可餅車車 - 訂單查詢'
         }
       },
       {
@@ -98,16 +105,7 @@ const routes = [
         component: () => import('../views/NewsView.vue'),
         meta: {
           title: '塔可餅車車 - 最新消息'
-        },
-        children: [
-          {
-            path: '/:newsId',
-            component: () => import('../views/NewsView.vue'),
-            meta: {
-              title: '塔可餅車車 - 最新消息'
-            }
-          }
-        ]
+        }
       }
     ]
   }
