@@ -7,7 +7,10 @@
         <div class="col-12 mb-3 d-flex flex-column align-items-center"
           v-for="item in filterNews" :key="item">
           <img :src="item.image" alt="" width="800" height="500">
-          <h4 class="voucher">{{ item.description }}</h4>
+          <div v-if="item.description"  class="voucher">
+            <p ref="voucher" class="fs-4 m-0">{{ item.description }}</p>
+            <button class="btn btn-outline-dark ms-2" type="button" @click.prevent="copyVoucher(item.description)"><i class="bi bi-clipboard"></i></button>
+          </div>
         </div>
       </div>
       <div class="accordion accordion-flush mb-3" id="accordionFlushExample"
@@ -20,7 +23,9 @@
         </h2>
         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
           <div class="accordion-body">
-            使用本店線上訂餐系統時，請備註外送或自取。
+            1.使用本店線上訂餐系統時，請備註外送或自取。
+            2.付款可使用信用卡及Line Pay 。
+            3.完成付款後，餐點馬上開始製作。
           </div>
         </div>
       </div>
@@ -51,11 +56,15 @@
       </div>
     </div>
   </section>
+  <message-modal ref="messageModal"
+  :msg="messageModal"></message-modal>
 </template>
 
 <style lang="scss">
 .voucher{
   padding: 15px 10px;
+  display: flex;
+  justify-content: center;
   background-color: #fa0;
   border:3px double #000;
 }
@@ -83,6 +92,7 @@
 <script>
 import BannerComponent from '../components/BannerComponent.vue'
 import CollapseMixin from '@/mixins/CollapseMixin '
+import MessageModal from '../components/MessageModal.vue'
 
 export default {
   data () {
@@ -93,11 +103,16 @@ export default {
       news: [],
       discount: {},
       vouchers: {},
-      cacheSearch: '優惠'
+      cacheSearch: '優惠',
+      messageModal: {
+        title: '',
+        success: ''
+      }
     }
   },
   components: {
-    BannerComponent
+    BannerComponent,
+    MessageModal
   },
   mixins: [CollapseMixin],
   computed: {
@@ -113,11 +128,19 @@ export default {
       this.isLoading = true
       this.$http.get(api)
         .then((res) => {
-          console.log(res.data.articles)
           this.isLoading = false
           if (res.data.success) {
             this.news = res.data.articles
           }
+        })
+    },
+    copyVoucher (code) {
+      const messageComponent = this.$refs.messageModal
+      navigator.clipboard.writeText(code)
+        .then(() => {
+          this.messageModal.success = true
+          this.messageModal.title = '優惠碼複製成功'
+          messageComponent.showModal()
         })
     }
   },

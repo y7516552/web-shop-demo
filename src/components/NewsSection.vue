@@ -7,12 +7,12 @@
             <td>{{$filters.date(item.create_at)}}</td>
             <td>{{item.tag}}</td>
             <td width="50"><span v-if="key < 1" class="text-danger">New!!</span></td>
-            <td><a class="news-link" href="/news">{{item.title}}</a></td>
+            <td>{{item.title}}</td>
           </tr>
       </tbody>
     </table>
     <div class="text-end mt-5">
-      <router-link class="btn-more" to="/news">更多消息?</router-link>
+      <router-link class="btn-more" to="/user/news">更多消息?</router-link>
     </div>
   </div>
 </template>
@@ -43,7 +43,6 @@ export default {
       this.isLoading = true
       this.$http.get(api)
         .then((res) => {
-          console.log(res.data.articles)
           this.isLoading = false
           if (res.data.success) {
             this.news = res.data.articles

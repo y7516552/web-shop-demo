@@ -100,7 +100,6 @@ export default {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
       this.isLoading = true
       this.$http.get(api).then((res) => {
-        console.log(res.data.products)
         this.products = res.data.products
         for (let i = 0; i <= 3; i++) {
           this.tempProducts.push(this.products[i])
@@ -121,7 +120,6 @@ export default {
       }
       this.msg.product = item
       this.$http.post(api, { data: cart }).then((res) => {
-        console.log(res)
         this.msg.success = res.data.success
         this.msg.title = res.data.message
         this.msg.qty = 1

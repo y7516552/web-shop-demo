@@ -120,16 +120,17 @@
         </div>
         <div class=" mb-3">
           <label for="pickup" class="form-label">自取或外送</label>
-          <button class="btn btn-warning form-control mb-1" type="button" name="pickUp"
+          <button class="btn btn-primary form-control mb-1" type="button" name="pickUp"
             @click.prevent="pickUp = true" :checked="pickUp">自取</button>
-          <button class="btn btn-warning form-control mb-1" type="button" name="pickUp"
+          <button class="btn btn-primary form-control mb-1" type="button" name="pickUp"
+            :class="{'active' : !pickUp}"
             @click.prevent="pickUp = false" :checked="!pickUp">外送</button>
         </div>
         <div class="mb-3"
           v-if="!pickUp">
           <label for="address" class="form-label">收件人地址</label>
           <vee-field type="text" class="form-control" id="address" placeholder="請輸入收件地址" name="address" required
-            rules="required"
+            :rules="addressValidate"
             :class="{ 'is-invalid': errors['address'] }"
             :disabled="pickUp"
             v-model="form.user.address"></vee-field>
@@ -237,7 +238,7 @@ export default {
           name: '',
           email: '',
           tel: '',
-          address: ''
+          address: '台中市'
         },
         message: ''
       }
@@ -368,6 +369,10 @@ export default {
     isPhone (value) {
       const phoneNumber = /^(09)[0-9]{8}$/
       return phoneNumber.test(value) ? true : '手機號碼格式錯誤'
+    },
+    addressValidate (text) {
+      const address = /^台中市/
+      return address.test(text) ? true : '外送限定台中市'
     },
     pushToProduct () {
       this.$router.push('/user/product')
