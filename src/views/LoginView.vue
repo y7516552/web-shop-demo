@@ -27,13 +27,16 @@
               id="floatingPassword"
               placeholder="Password"
               required
+              autocomplete="on"
               v-model="user.password">
             <label for="floatingPassword">Password</label>
           </div>
-          <button class="btn btn-primary mx-0 px-5">登入</button>
+          <button @click="signIn()" class="btn btn-primary mx-0 px-5">登入</button>
         </form>
       </div>
     </div>
+    <message-modal ref="messageModal"
+    :msg="msgModal"></message-modal>
   </div>
 </template>
 
@@ -55,17 +58,26 @@
 </style>
 
 <script>
+import MessageModal from '../components/MessageModal.vue'
 export default {
   data () {
     return {
       user: {
         username: '',
         password: ''
+      },
+      msgModal: {
+        title: '登入失敗...',
+        success: ''
       }
     }
   },
+  components: {
+    MessageModal
+  },
   methods: {
     signIn () {
+      const messageComponent = this.$refs.messageModal
       const api = `${process.env.VUE_APP_API}admin/signin`
       this.$http.post(api, this.user)
         .then((res) => {
@@ -73,9 +85,25 @@ export default {
             const { token, expired } = res.data
             document.cookie = `hexToken=${token}; expires=${new Date(expired)}`
             this.$router.push('/dashboard/products')
+          } else {
+            this.msgModal.success = false
+            messageComponent.showModal()
+          }
+        })
+    },
+    checkLogin () {
+      const url = `${process.env.VUE_APP_API}api/user/check`
+      const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1')
+      this.$http.post(url, token)
+        .then((res) => {
+          if (res.data.success) {
+            this.$router.push('/dashboard/products')
           }
         })
     }
+  },
+  mounted () {
+    this.checkLogin()
   }
 }
 </script>

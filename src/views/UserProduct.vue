@@ -43,8 +43,8 @@
                 <button
                   @click.prevent="addCart(product.id)"
                   :disabled="this.status.loadingItem === product.id"
-                  class="btn btn-outline-danger" type="button">
-                    <div class="spinner-border text-danger spinner-grow-sm" role="status"
+                  class="btn btn-outline-success" type="button">
+                    <div class="spinner-border text-success spinner-grow-sm" role="status"
                       v-if="this.status.loadingItem === product.id">
                       <span class="visually-hidden">Loading...</span>
                     </div>

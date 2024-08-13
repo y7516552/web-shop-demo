@@ -44,10 +44,10 @@
               <div class="btn-group btn-group-sm w-100">
                 <button type="button" class="btn btn-outline-secondary"
                   @click.prevent="getProduct(item.id)">查看更多</button>
-                <button type="button" class="btn btn-outline-danger"
+                <button type="button" class="btn btn-outline-success"
                   :disabled="this.status.loadingItem === item.id"
                   @click.prevent="addCart(item)">
-                    <div class="spinner-border text-danger spinner-grow-sm" role="status"
+                    <div class="spinner-border text-success spinner-grow-sm" role="status"
                       v-if="this.status.loadingItem === item.id">
                         <span class="visually-hidden">Loading...</span>
                     </div>
@@ -72,10 +72,10 @@
                     <div class="btn-group btn-group-sm w-100">
                       <button type="button" class="btn btn-outline-secondary"
                         @click.prevent="getProduct(item.id)">查看更多</button>
-                      <button type="button" class="btn btn-outline-danger"
+                      <button type="button" class="btn btn-outline-success"
                         :disabled="this.status.loadingItem === item.id"
                         @click.prevent="addCart(item)">
-                        <div class="spinner-border text-danger spinner-grow-sm" role="status"
+                        <div class="spinner-border text-success spinner-grow-sm" role="status"
                           v-if="this.status.loadingItem === item.id">
                           <span class="visually-hidden">Loading...</span>
                         </div>
