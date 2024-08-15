@@ -7,7 +7,11 @@
         <div  class="card-img-overlay">
           <h5 class="card-title">{{ item.title }}</h5>
           <p class="card-text text-truncate">{{ item.description }}</p>
-          <p class="card-text text-end">$ {{ $filters.currency(item.price) }}</p>
+          <div class="d-flex justify-content-between">
+            <i class="bi bi-heart ms-3"></i>
+            <i class="bi bi-heart-fill"></i>
+            <p class="card-text text-end">$ {{ $filters.currency(item.price) }}</p>
+          </div>
           <div class="btn-group btn-group-sm">
             <button type="button" class="btn btn-warning"
               @click.prevent="getProduct(item.id)">
@@ -94,6 +98,12 @@ export default {
   },
   components: {
     MessageModal
+  },
+  computed: {
+    isInLikeList (id) {
+      const likesIdList = JSON.parse(localStorage.getItem('tacos-likesList'))
+      return likesIdList.includes(id)
+    }
   },
   methods: {
     getProducts () {

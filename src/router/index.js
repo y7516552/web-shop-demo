@@ -87,6 +87,13 @@ const routes = [
         }
       },
       {
+        path: 'likes',
+        component: () => import('../views/UserLikesList.vue'),
+        meta: {
+          title: '塔可餅車車 - 訂單查詢'
+        }
+      },
+      {
         path: 'checkout/:orderId',
         component: () => import('../views/UserCheckout.vue'),
         meta: {

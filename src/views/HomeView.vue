@@ -1,6 +1,6 @@
 <template>
   <navbar-component></navbar-component>
-  <section class="banner mt-5">
+  <section class="banner">
     <div class="img-carousel">
       <ul class="img-carousel-list">
         <li class="bg-1"></li>
@@ -185,7 +185,7 @@ html{
     }
     .title{
       position: absolute;
-      top: 15%;
+      top: 250px;
       left: 50%;
       transform: translate(-50%, -50%);
       display: flex;

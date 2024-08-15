@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand-lg  fixed-top" :class=" active? 'navbar-dark bg-dark':'navbar-unactive' ">
     <div class="container">
       <router-link class="navbar-brand" to="/">
         <img class="logo" src="../img/taco.svg" alt="由 Twitter, CC BY 4.0, https://commons.wikimedia.org/w/index.php?curid=59969682">
@@ -55,12 +55,22 @@
           </li>
         </ul>
       </div>
-      <dropdown-cart></dropdown-cart>
+      <dropdown-likes :active="active"></dropdown-likes>
+      <dropdown-cart :active="active"></dropdown-cart>
     </div>
   </nav>
 </template>
 
 <style lang="scss">
+.navbar-unactive{
+  background-color: transparent;
+  .container{
+
+    a{
+      color: #000;
+    }
+  }
+}
 .navbar-toggler{
   order: 1;
 }
@@ -82,6 +92,7 @@
 }
 .navbar-brand{
   font-weight: 900;
+  font-size: 2em;
   .logo{
     width: 40px;
     height: 40px;
@@ -90,19 +101,26 @@
 </style>
 
 <script>
+import DropdownLikes from '../components/DropdownLikes.vue'
 import DropdownCart from '../components/DropdownCart.vue'
 export default {
   props: ['isLogin'],
   components: {
+    DropdownLikes,
     DropdownCart
   },
   data () {
     return {
+      active: false,
       dropdownAdmin: false,
       dropdownNav: false
     }
   },
   methods: {
+    handleScroll () {
+      if (window.scrollY <= 0) this.active = false
+      if (window.scrollY > 0) this.active = true
+    },
     dropdown (item) {
       if (item === 'dropdownAdmin') {
         if (this.dropdownAdmin) {
@@ -127,6 +145,9 @@ export default {
           }
         })
     }
+  },
+  created () {
+    window.addEventListener('scroll', this.handleScroll)
   }
 }
 </script>

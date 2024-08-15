@@ -1,25 +1,26 @@
 <template>
 <div class="btn-group dropdown cart-menu ms-auto me-2">
-  <button type="button" class="btn rounded"
+  <router-link  class="btn  rounded"
     :class="active?'btn-dark':''"
-    @click.prevent="dropdown">
-      <i class="bi bi-cart-fill"></i>
-      <span v-if="cartLength > 0" class=" badge rounded-pill bg-danger">
-        {{ cartLength }}
+    to="/user/likes"
+    >
+      <i class="bi bi-heart"></i>
+      <span v-if="likesLength > 0" class=" badge rounded-pill bg-danger">
+        {{ likesLength }}
       </span>
-  </button>
+  </router-link>
   <ul class="dropdown-menu mt-5 me-5 cart-list py-0"  :class="{'show':  dropdownBtn }">
-    <template v-if="!cartShow">
+    <template v-if="!likesShow">
       <li class="dropdown-item d-flex justify-content-center">
         目前購物車是空的喔!
       </li>
     </template>
     <template v-else>
       <li class="dropdown-item d-flex justify-content-center border-bottom bg-warning text-white">
-        <i class="bi bi-cart-fill me-2"></i>
+        <i class="bi bi-heart me-2"></i>
         購物車
         </li>
-      <li v-for="item in cart.carts" :key="item.id">
+      <li v-for="item in likes" :key="item.id">
         <div class="dropdown-item d-flex justify-content-between align-items-center">
           <button class="btn btn-outline-danger" type="button" @click.prevent="deleteCart(item.id)">X</button>
           <p class="fs-7 m-0">{{ item.product.title }}</p>
@@ -32,7 +33,7 @@
       <hr>
       <li class="dropdown-item d-flex justify-content-between">
         <p>小計</p>
-        <p>{{$filters.currency(cart.total)}}</p>
+        <p>{{$filters.currency(likes.total)}}</p>
         <p>元</p>
       </li>
       <router-link class="btn btn-dark w-100 mt-2" to="/user/cart" @click.prevent="dropdown">前往結帳</router-link>
@@ -60,23 +61,23 @@ export default {
   data () {
     return {
       dropdownBtn: false,
-      cart: {},
-      cartShow: false,
-      cartLength: 0
-    }
-  },
-  watch: {
-    cartLength () {
-      this.cartShow = false
-      if (this.cartLength > 0) {
-        this.cartShow = true
-      }
+      likes: [],
+      likesShow: false,
+      likesLength: 0
     }
   },
   props: {
     active: {
       type: Boolean,
       default () { return false }
+    }
+  },
+  watch: {
+    likesLength () {
+      this.likesShow = false
+      if (this.likesLength > 0) {
+        this.likesShow = true
+      }
     }
   },
   methods: {
@@ -87,45 +88,43 @@ export default {
         this.dropdownBtn = true
       }
     },
-    getCart () {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
-      this.isLoading = true
-      this.$http.get(api).then((res) => {
-        this.cart = res.data.data
-        this.cartLength = res.data.data.carts.length
-        this.$emit('emit-cartlength', this.cartLength)
-        this.isLoading = false
-        this.cartShow = false
-        if (res.data.data.carts.length > 0) {
-          this.cartShow = true
-        }
-      })
-    },
-    updateCart (item) {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
-      const cart = {
-        product_id: item.product_id,
-        qty: item.qty
+    getLikes () {
+      const likesIdList = JSON.parse(localStorage.getItem('tacos-likesList')) || []
+      const likes = []
+      if (likesIdList.length > 0) {
+        likesIdList.forEach(id => {
+          const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${id}`
+          this.$http.get(api).then((res) => {
+            likes.push(res.data.product)
+          })
+        })
       }
-      this.isLoading = true
-      this.$http.put(api, { data: cart }).then((res) => {
-        this.isLoading = false
-        this.getCart()
-      })
+      this.likes = likes
+      this.likesLength = likes.length
     },
-    deleteCart (id) {
+    updateLikes (item) {
+      const likesIdList = JSON.parse(localStorage.getItem('tacos-likesList')) || []
+      if (likesIdList.includes(item.id)) {
+        likesIdList.splice(likesIdList.indexOf(item.id), 1)
+      } else {
+        likesIdList.push(item.id)
+      }
+      localStorage.setItem('tacos-likesList', likesIdList)
+      this.getLikes()
+    },
+    deleteLikes (id) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${id}`
       this.isLoading = true
       this.$http.delete(api).then((res) => {
         this.isLoading = false
-        this.getCart()
+        this.getLikes()
       })
     }
   },
   created () {
-    this.getCart()
-    emitter.on('updateCart', () => {
-      this.getCart()
+    this.getLikes()
+    emitter.on('updateLikes', () => {
+      this.getLikes()
     })
   }
 }
