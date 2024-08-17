@@ -1,6 +1,6 @@
 <template>
   <navbar-component></navbar-component>
-  <div class="container-fluid mt-5 pt-2 position-relative">
+  <div class="container-fluid mt-5 pt-2 position-relative ">
     <div class="container router-view mt-5">
       <toast-message></toast-message>
       <router-view></router-view>

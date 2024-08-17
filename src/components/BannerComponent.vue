@@ -22,6 +22,11 @@
     font-weight: 900;
   }
 }
+@media (max-width: 767.98px) {
+  .banner-small {
+    width: 100vw;
+  }
+}
 </style>
 <script>
 export default {

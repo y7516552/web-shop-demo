@@ -8,8 +8,8 @@
           <h5 class="card-title">{{ item.title }}</h5>
           <p class="card-text text-truncate">{{ item.description }}</p>
           <div class="d-flex justify-content-between">
-            <i class="bi bi-heart ms-3"></i>
-            <i class="bi bi-heart-fill"></i>
+            <i v-if="isInLikeList(item.id)" class="bi bi-heart-fill likes" @click.prevent="updateLikesList(item.id)"></i>
+            <i v-else class="bi bi-heart likes" @click.prevent="updateLikesList(item.id)"></i>
             <p class="card-text text-end">$ {{ $filters.currency(item.price) }}</p>
           </div>
           <div class="btn-group btn-group-sm">
@@ -59,6 +59,9 @@
       .card-title{
         font-weight: 900;
       }
+      .likes{
+        color:(var(--bs-pink));
+      }
     }
   }
   .btn-more{
@@ -78,6 +81,7 @@
 </style>
 <script>
 import emitter from '@/methods/emitter'
+import { getLikesIdList, updateLikesList } from '@/methods/likesList'
 import MessageModal from '../components/MessageModal.vue'
 export default {
   data () {
@@ -99,21 +103,23 @@ export default {
   components: {
     MessageModal
   },
-  computed: {
-    isInLikeList (id) {
-      const likesIdList = JSON.parse(localStorage.getItem('tacos-likesList'))
-      return likesIdList.includes(id)
-    }
-  },
   methods: {
+    getLikesIdList,
+    updateLikesList,
+    isInLikeList (id) {
+      const likesIdList = this.getLikesIdList()
+      return likesIdList.includes(id)
+    },
     getProducts () {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
       this.isLoading = true
+      const productList = []
       this.$http.get(api).then((res) => {
         this.products = res.data.products
         for (let i = 0; i <= 3; i++) {
-          this.tempProducts.push(this.products[i])
+          productList.push(this.products[i])
         }
+        this.tempProducts = productList
         this.isLoading = false
       })
     },
@@ -143,6 +149,9 @@ export default {
   },
   created () {
     this.getProducts()
+    emitter.on('updateLikes', () => {
+      this.getProducts()
+    })
   }
 }
 </script>

@@ -2,9 +2,9 @@
   <banner-component
     :msg="msg"></banner-component>
   <div class="row mt-3">
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-3 pe-sm-5 pe-0">
       <div class="side-bar mt-5">
-        <div class="d-flex flex-column align-items-center justify-content-center">
+        <div class="d-flex flex-xl-column flex-md-column align-items-center justify-content-center flex-row flex-md-nowrap flex-wrap">
         <button class="btn tag-btn" @click.prevent="changeTag('')"
           :class="{'active':cacheSearch == ''}">全部商品</button>
         <button class="btn tag-btn" @click.prevent="changeTag('taco')"
@@ -30,7 +30,7 @@
       <loading-component :active="isLoading"></loading-component>
       <div class="row mt-5">
         <div class="row filter-product" v-if="cacheSearch">
-          <div class="col-6 col-md-4 mb-4" v-for="item in filterProduct" :key="item.id">
+          <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-4" v-for="item in filterProduct" :key="item.id">
             <div class="product-card">
               <div class="product-img" :style="{backgroundImage:`url(${item.imageUrl})`}" style="height: 200px;">
                 <div class="product-tag">{{ item.category }}</div>
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div class="row" v-else>
-          <div class="col-6 col-md-4 mb-4" v-for="item in products" :key="item.id">
+          <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-4" v-for="item in products" :key="item.id">
                   <div class="product-card">
                     <div class="products-img" :style="{backgroundImage:`url(${item.imageUrl})`}">
                       <div class="product-tag">{{ item.category }}</div>
@@ -158,7 +158,7 @@
 }
 .side-bar{
   position: sticky;
-  top: 60px;
+  top: 100px;
 }
 .tag-btn{
   display: flex;

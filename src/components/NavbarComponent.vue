@@ -69,6 +69,11 @@
     a{
       color: #000;
     }
+    .navbar-toggler{
+      .navbar-toggler-icon{
+        color: #000;
+      }
+    }
   }
 }
 .navbar-toggler{
