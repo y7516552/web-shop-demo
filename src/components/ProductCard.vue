@@ -7,9 +7,11 @@
         <div  class="card-img-overlay">
           <h5 class="card-title">{{ item.title }}</h5>
           <p class="card-text text-truncate">{{ item.description }}</p>
-          <div class="d-flex justify-content-between">
-            <i v-if="isInLikeList(item.id)" class="bi bi-heart-fill likes" @click.prevent="updateLikesList(item.id)"></i>
-            <i v-else class="bi bi-heart likes" @click.prevent="updateLikesList(item.id)"></i>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <button  type="button" class="btn btn-light rounded-pill" @click.prevent="updateLikesList(item.id)">
+              <i v-if="isInLikeList(item.id)" class="bi bi-heart-fill likes" ></i>
+              <i v-else class="bi bi-heart likes" ></i>
+            </button>
             <p class="card-text text-end">$ {{ $filters.currency(item.price) }}</p>
           </div>
           <div class="btn-group btn-group-sm">

@@ -8,7 +8,11 @@
   </div>
   <footer-component></footer-component>
 </template>
-
+<style lang="scss">
+.router-view{
+  position: relative;
+}
+</style>
 <script>
 import emitter from '@/methods/emitter.js'
 import NavbarComponent from '../components/NavbarComponent.vue'

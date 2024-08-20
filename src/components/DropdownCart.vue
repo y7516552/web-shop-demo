@@ -1,5 +1,5 @@
 <template>
-<div class="btn-group dropdown cart-menu ms-auto me-2">
+<div class="btn-group dropdown cart-menu me-2">
   <button type="button" class="btn rounded"
     :class="active?'btn-dark':''"
     @click.prevent="dropdown">
@@ -35,7 +35,7 @@
         <p>{{$filters.currency(cart.total)}}</p>
         <p>元</p>
       </li>
-      <router-link class="btn btn-dark w-100 mt-2" to="/user/cart" @click.prevent="dropdown">前往結帳</router-link>
+      <router-link class="btn w-100 mt-2" :class="active?'btn-dark':'btn-light'" to="/user/cart" @click.prevent="dropdown">前往結帳</router-link>
     </template>
   </ul>
 </div>

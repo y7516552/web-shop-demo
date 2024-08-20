@@ -1,5 +1,6 @@
 <template>
   <div class="banner-small">
+    <div class="banner-img active"></div>
     <h2 class="banner-title">{{msg.title}}</h2>
   </div>
 </template>
@@ -10,9 +11,25 @@
   width: 100%;
   height: 50vh;
   background-color: #999;
-  background-image: url("../img/banner/b-2.jpg");
-  background-size: cover;
-  overflow: hidden;
+  // background-image: url("../img/banner/b-2.jpg");
+  // background-size: cover;
+  // overflow: hidden;
+  .banner-img{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 50vh;
+    background-color: #999;
+    background-image: url("../img/banner/b-2.jpg");
+    background-size: cover;
+    background-position: center center;
+    overflow: hidden;
+    &.active{
+      left: calc(-30vw);
+      width: 150vw;
+    }
+  }
   .banner-title{
     position: absolute;
     left: 0;

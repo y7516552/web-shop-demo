@@ -7,7 +7,7 @@
       </router-link>
       <button class="navbar-toggler " type="button"
         @click.prevent="dropdown('dropdownNav')">
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon" ></span>
       </button>
       <div v-if="isLogin" class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav w-100">
@@ -70,8 +70,10 @@
       color: #000;
     }
     .navbar-toggler{
+      background-color: #fff;
+      color: #000;
       .navbar-toggler-icon{
-        color: #000;
+        background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(0, 0, 0, 0.55)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E")
       }
     }
   }
