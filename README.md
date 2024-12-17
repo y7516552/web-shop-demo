@@ -22,3 +22,5 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+github page[link](https://y7516552.github.io/web-shop-demo/dist/)
